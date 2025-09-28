@@ -1,0 +1,132 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: block;
+  /*place-items: center;*/
+  min-width: auto;
+  min-height: AUTO;
+  
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: #ea4d9c;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding:10px 20px;
+  margin-top: 10px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #090808;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+.container {
+  display: block;
+  justify-content: center; /* จัดตรงกลางแนวนอน */
+  padding-top: 40px;       /* ระยะห่างด้านบน */
+  min-height: 100vh;
+  background: linear-gradient(200deg, #ffbde6,  #fbf7b9);
+}
+section {
+  display: block;
+  padding: 20px;
+  max-width: 100%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  
+}
+label {
+  display: block;
+  padding: 3px; /* ระยะห่างจาก input */
+}
+.center {
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+}
+.center-table {
+  margin: 0 auto; /* ทำให้ table อยู่กลาง container */
+}
+div {
+  max-width: auto;
+}
+.flex-container {
+  display: flex;
+  justify-content: center; /* จัดตรงกลางแนวนอน */
+  align-items: center;    /* จัดตรงกลางแนวตั้ง */
+  gap: 20px;              /* ระยะห่างระหว่างกล่อง */
+}
+.center-heading{
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #d1ecf9;
+}
+.grading{
+  background: linear-gradient(200deg, #ffbde6,  #fbf7b9);
+}
+.center-grading{
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(200deg, #ffbde6,  #fbf7b9);
+}
+.nav-links{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+  font-size: 1.5em;
+}
