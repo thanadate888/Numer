@@ -1,11 +1,26 @@
 import { useState } from "react";
-
+import Plot from "react-plotly.js";
 const FalsePosition: React.FC = () => {
   const [XL, setXL] = useState(0);
   const [XR, setXR] = useState(0);
   const [XM, setXM] = useState(0);
   const [equation, setEquation] = useState("x**3 + 4*x**2 - 10");
   const [Result, setResult] = useState<any[]>([]);
+
+const generateGraphData = (equation: string, start: number, end: number, steps = 100) => {
+  const f = new Function("x", "return " + equation + ";");
+  const xValues = [];
+  const yValues = [];
+  const step = (end - start) / steps;
+
+  for (let i = 0; i <= steps; i++) {
+    const x = start + i * step;
+    xValues.push(x);
+    yValues.push(f(x));
+  }
+
+  return { xValues, yValues };
+};
 
   function FalsePositionMethod(
     equation: string,
@@ -38,8 +53,10 @@ const FalsePosition: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>False Position Method</h1>
+    <div className="container">
+      <section className="center">
+      
+      <h1 className="center">False Position Method</h1>
       <input
         type="text"
         value={equation}
@@ -64,8 +81,8 @@ const FalsePosition: React.FC = () => {
       </button>
 
       <h2>ผลลัพธ์ XM: {XM} </h2>
-
-      <table border={1}>
+      <div > 
+      <table className="center-table">
         <thead>
           <tr>
             <th>Iteration</th>
@@ -87,8 +104,43 @@ const FalsePosition: React.FC = () => {
           ))}
         </tbody>
       </table>
+      <Plot
+  data={[
+    // เส้นกราฟ f(x)
+    {
+      x: generateGraphData(equation, XL - 1, XR + 1).xValues,
+      y: generateGraphData(equation, XL - 1, XR + 1).yValues,
+      type: "scatter",
+      mode: "lines",
+      marker: { color: "blue" },
+      name: "f(x)",
+    },
+    // จุด XL, XR, XM ของแต่ละรอบ
+    {
+      x: Result.map(r => r.XM),
+      y: Result.map(r => r.fXM),
+      type: "scatter",
+      mode: "markers+text",
+      marker: { color: "red", size: 10 },
+      text: Result.map(( i) => `XM${i}`),
+      textposition: "top center",
+      name: "XM Points",
+    },
+  ]}
+  layout={{
+    width: 700,
+    height: 400,
+    title: { text: "Graph of f(x) with XM" },
+    xaxis: { title: { text: "x" } },
+    yaxis: { title: { text: "f(x)" } },
+  }}
+/>
+      </div>
+  
+    </section>
     </div>
-  );
+    
+  );   
 };
 
 export default FalsePosition;

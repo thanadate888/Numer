@@ -13,6 +13,10 @@ const Main: React.FC = () => {
         <section className="column"> 
         <Link to="/bisection">Bisection Method</Link>
         <Link to="/falseposition">False Position Method</Link>
+        <Link to="/onepointiteration">One-point Iteration Method</Link>
+        <Link to="/newtonraphson">Newton Raphson Method</Link>
+        <Link to="/secant">Secant Method</Link>
+        <Link to="/cramer">Cramer's Rule</Link>
         </section>
       </nav>
       </section>

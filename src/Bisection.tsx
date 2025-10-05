@@ -1,6 +1,7 @@
 import { useState } from "react";
 import unicon from "./69c66c1d409f30ac80152738ef529e4d.jpg";
 import kuromi from "./1A9CBFE4-5E4F-4444-BE85-FC80369749CF.jpg";
+import Plot from "react-plotly.js";
 
 function App() {
   const [XL, setXL] = useState(0);
@@ -38,6 +39,16 @@ function App() {
     setResult(steps);
     return XM;
   }
+  function generateGraphData(equation: string, min = -10, max = 10, step = 0.1) {
+  const f = new Function("x", "return " + equation + ";");
+  const xValues = [];
+  const yValues = [];
+  for (let x = min; x <= max; x += step) {
+    xValues.push(x);
+    yValues.push(f(x));
+  }
+  return { xValues, yValues };
+}
 
   return (
     <div className="container">
@@ -107,6 +118,38 @@ function App() {
             </tbody>
           </table>
         </div>
+  <Plot
+  data={[
+    {
+      x: generateGraphData(equation).xValues,
+      y: generateGraphData(equation).yValues,
+      type: "scatter",
+      mode: "lines",
+      marker: { color: "blue" },
+      name: "f(x)",
+    },
+    {
+      x: [XL, XR, XM],
+      y: [
+        new Function("x", "return " + equation + ";")(XL),
+        new Function("x", "return " + equation + ";")(XR),
+        new Function("x", "return " + equation + ";")(XM),
+      ],
+      mode: "markers+text",
+      marker: { color: ["red", "green", "orange"], size: 10 },
+      text: ["XL", "XR", "XM"],
+      textposition: "top center",
+      name: "Points",
+    },
+  ]}
+  layout={{
+    width: 700,
+    height: 400,
+    title: { text: "Graph of f(x)" }, 
+    xaxis: { title: { text: "x" } }, 
+    yaxis: { title: { text: "f(x)" } }, 
+  }}
+/>
       </section>
     </div>
   );
