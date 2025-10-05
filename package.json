@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://thanadate888.github.io/Numer",
+  "homepage": "https://thanadate888.github.io/Numer/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
