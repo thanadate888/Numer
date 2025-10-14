@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./Mainmemu";
 import Bisection from "./Bisection";
@@ -7,9 +6,10 @@ import OnePointIteration from "./One-point-Iteration";
 import NewTonRaphson from "./newtonraphson";
 import Secant from "./secant";
 import Cramer from "./Cramer";
+
 function App() {
   return (
-    <Router >
+    <Router basename="/Numer">
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/bisection" element={<Bisection />} />
