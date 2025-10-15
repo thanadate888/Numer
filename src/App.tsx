@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./Mainmemu";
 import Bisection from "./Bisection";
 import FalsePosition from "./FalsePosition";
@@ -9,7 +9,7 @@ import Cramer from "./Cramer";
 
 function App() {
   return (
-    <Router basename="/Numer">
+    <BrowserRouter basename="/Numer">
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/bisection" element={<Bisection />} />
@@ -19,7 +19,7 @@ function App() {
         <Route path="/secant" element={<Secant />} />
         <Route path="/cramer" element={<Cramer />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
