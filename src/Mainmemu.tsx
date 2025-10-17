@@ -17,6 +17,7 @@ const Main: React.FC = () => {
         <Link to="/newtonraphson">Newton Raphson Method</Link>
         <Link to="/secant">Secant Method</Link>
         <Link to="/cramer">Cramer's Rule</Link>
+        <Link to="/GaussianElimination">GaussianElimination</Link>
         </section>
       </nav>
       </section>

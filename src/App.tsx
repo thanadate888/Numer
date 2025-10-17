@@ -6,6 +6,7 @@ import OnePointIteration from "./One-point-Iteration";
 import NewTonRaphson from "./newtonraphson";
 import Secant from "./secant";
 import Cramer from "./Cramer";
+import GaussianElimination from "./GaussianElimination";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/newtonraphson" element={<NewTonRaphson />} />
         <Route path="/secant" element={<Secant />} />
         <Route path="/cramer" element={<Cramer />} />
+        <Route path="/GaussianElimination" element={<GaussianElimination />} />
       </Routes>
     </BrowserRouter>
   );
