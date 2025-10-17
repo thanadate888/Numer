@@ -1,6 +1,4 @@
 import { useState } from "react";
-import unicon from "./69c66c1d409f30ac80152738ef529e4d.jpg";
-import kuromi from "./1A9CBFE4-5E4F-4444-BE85-FC80369749CF.jpg";
 import Plot from "react-plotly.js";
 
 function App() {
@@ -66,12 +64,7 @@ function App() {
           onChange={(e) => setEquation(e.target.value)}
         />
         <div className="flex-container">
-          <img
-            src={kuromi}
-            alt="kuromi"
-            className="center-image"
-            height={100}
-          />
+          
           <div>
             <h4>XL</h4>
             <input
@@ -88,7 +81,7 @@ function App() {
               onChange={(e) => setXR(parseFloat(e.target.value))}
             />
           </div>
-          <img src={unicon} alt="Logo" className="center-image" height={100} />
+          
         </div>
         <button onClick={() => Bisection(equation, XL, XR)}>คำนวณราก</button>
 

@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./Mainmemu";
-import Bisection from "./Bisection";
-import FalsePosition from "./FalsePosition";
-import OnePointIteration from "./One-point-Iteration";
-import NewTonRaphson from "./newtonraphson";
-import Secant from "./secant";
-import Cramer from "./Cramer";
-import GaussianElimination from "./GaussianElimination";
+import Bisection from "./page/Bisection";
+import FalsePosition from "./page/FalsePosition";
+import OnePointIteration from "./page/One-point-Iteration";
+import NewTonRaphson from "./page/newtonraphson";
+import Secant from "./page/secant";
+import Cramer from "./page/Cramer";
+import GaussianElimination from "./page/GaussianElimination";
 
 function App() {
   return (
