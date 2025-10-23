@@ -1,45 +1,32 @@
 import { useState } from "react";
-import Plot from "react-plotly.js";
+import InputEquation from "../component/InputEquation";
+import ResultTable from "../component/ResultTable";
+import GraphPlot from "../component//GraphPlot";
+import SolveButton from "../component/SolveButton";
+
 const FalsePosition: React.FC = () => {
   const [XL, setXL] = useState(0);
   const [XR, setXR] = useState(0);
   const [XM, setXM] = useState(0);
+  const [error, setError] = useState(1e-6);
   const [equation, setEquation] = useState("x**3 + 4*x**2 - 10");
   const [Result, setResult] = useState<any[]>([]);
 
-const generateGraphData = (equation: string, start: number, end: number, steps = 100) => {
-  const f = new Function("x", "return " + equation + ";");
-  const xValues = [];
-  const yValues = [];
-  const step = (end - start) / steps;
-
-  for (let i = 0; i <= steps; i++) {
-    const x = start + i * step;
-    xValues.push(x);
-    yValues.push(f(x));
-  }
-
-  return { xValues, yValues };
-};
-
-  function FalsePositionMethod(
-    equation: string,
-    XL: number,
-    XR: number,
-    Error = 1e-6,
-    maxIter = 100
-  ) {
-    const f = new Function("x", "return " + equation + ";");
+  function FalsePositionMethod(equation: string, XL: number, XR: number,  maxIter = 100) {
+    const safeEq = equation
+      .replaceAll("^", "**")
+      .replaceAll(";", "")
+      .trim();
+    const f = new Function("x", "with(Math) { return " + safeEq + " }");
     let iter = 0;
     let XM = XL;
     const steps: any[] = [];
 
     while (iter < maxIter) {
-      XM = (XL * f(XR) - XR * f(XL)) / (f(XR) - f(XL)); // สูตร False Position
-
+      XM = (XL * f(XR) - XR * f(XL)) / (f(XR) - f(XL));
       steps.push({ iter, XL, XR, XM, fXM: f(XM) });
 
-      if (Math.abs(f(XM)) < Error) break;
+      if (Math.abs(f(XM)) < error) break;
 
       if (f(XL) * f(XM) < 0) XR = XM;
       else XL = XM;
@@ -55,92 +42,46 @@ const generateGraphData = (equation: string, start: number, end: number, steps =
   return (
     <div className="container">
       <section className="center">
-      
-      <h1 className="center">False Position Method</h1>
-      <input
-        type="text"
-        value={equation}
-        onChange={(e) => setEquation(e.target.value)}
-      />
+      <h1>False Position Method</h1>
+
+      {/* Input สมการ */}
+      <InputEquation equation={equation} onChange={setEquation} />
+
+      {/* Input XL / XR */}
       <div>
         <h4>XL</h4>
-        <input
-          type="number"
-          value={XL}
-          onChange={(e) => setXL(parseFloat(e.target.value))}
-        />
+        <input type="number" value={XL} onChange={(e) => setXL(parseFloat(e.target.value))} />
         <h4>XR</h4>
-        <input
-          type="number"
-          value={XR}
-          onChange={(e) => setXR(parseFloat(e.target.value))}
-        />
+        <input type="number" value={XR} onChange={(e) => setXR(parseFloat(e.target.value))} />
+        <h4>Error</h4>
+        <input type="number" value={error} onChange={(e) => setError(parseFloat(e.target.value))} />
       </div>
-      <button onClick={() => FalsePositionMethod(equation, XL, XR)}>
-        คำนวณราก
-      </button>
 
-      <h2>ผลลัพธ์ XM: {XM} </h2>
-      <div > 
-      <table className="center-table">
-        <thead>
-          <tr>
-            <th>Iteration</th>
-            <th>XL</th>
-            <th>XR</th>
-            <th>XM</th>
-            <th>f(XM)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Result.map((res, index) => (
-            <tr key={index}>
-              <td>{res.iter}</td>
-              <td>{res.XL.toFixed(6)}</td>
-              <td>{res.XR.toFixed(6)}</td>
-              <td>{res.XM.toFixed(6)}</td>
-              <td>{res.fXM.toExponential(6)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Plot
-  data={[
-    // เส้นกราฟ f(x)
-    {
-      x: generateGraphData(equation, XL - 1, XR + 1).xValues,
-      y: generateGraphData(equation, XL - 1, XR + 1).yValues,
-      type: "scatter",
-      mode: "lines",
-      marker: { color: "blue" },
-      name: "f(x)",
-    },
-    // จุด XL, XR, XM ของแต่ละรอบ
-    {
-      x: Result.map(r => r.XM),
-      y: Result.map(r => r.fXM),
-      type: "scatter",
-      mode: "markers+text",
-      marker: { color: "red", size: 10 },
-      text: Result.map(( i) => `XM${i}`),
-      textposition: "top center",
-      name: "XM Points",
-    },
-  ]}
-  layout={{
-    width: 700,
-    height: 400,
-    title: { text: "Graph of f(x) with XM" },
-    xaxis: { title: { text: "x" } },
-    yaxis: { title: { text: "f(x)" } },
-  }}
-/>
-      </div>
-  
-    </section>
+      {/* ปุ่มคำนวณ */}
+      <SolveButton onClick={() => FalsePositionMethod(equation, XL, XR)} />
+
+      <h2>ผลลัพธ์ XM: {XM}</h2>
+
+      {/* แสดงผล */}
+      <ResultTable 
+      columns={["Iter", "XL", "XR", "XM", "fXM"]}
+      data={Result} 
+      />
+      <GraphPlot data={[
+          {
+            x: Array.from({ length: 200 }, (_, i) => i / 10 - 10),
+            y: Array.from({ length: 200 }, (_, i) =>
+              new Function("x", "with(Math){ return "  + " }")(i / 10 - 10)
+            ),
+            type: "scatter",
+            mode: "lines",
+            name: "f(x)",
+          },
+        ]}
+        title="Graph of f(x)" />
+        </section>
     </div>
-    
-  );   
+  );
 };
 
 export default FalsePosition;

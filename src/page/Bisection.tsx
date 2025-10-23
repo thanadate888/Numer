@@ -1,151 +1,103 @@
 import { useState } from "react";
-import Plot from "react-plotly.js";
+import InputEquation from "../component/InputEquation";
+import GraphPlot from "../component/GraphPlot";
+import ResultTable from "../component/ResultTable";
+import SolveButton from "../component/SolveButton";
 
-function App() {
+const BisectionPage: React.FC = () => {
+  const [equation, setEquation] = useState("x**3 + 4*x**2 - 10");
   const [XL, setXL] = useState(0);
   const [XR, setXR] = useState(0);
   const [XM, setXM] = useState(0);
-  const [equation, setEquation] = useState("x**3 + 4*x**2 - 10");
+  const [error, setError] = useState(1e-6);
   const [Result, setResult] = useState<any[]>([]);
 
-  function Bisection(
-    equation: string,
-    XL: number,
-    XR: number,
-    Error = 1e-6,
-    maxIter = 100
-  ) {
-    const f = new Function("x", "return " + equation + ";");
-    let iter = 0;
-    let XM = (XL + XR) / 2;
+  const Bisection = () => {
+    const safeEq = equation
+      .replaceAll("^", "**")
+      .replaceAll(";", "")
+      .trim();
+    const f = new Function("x", "with(Math) { return " + safeEq + " }");
+
+    let xl = XL, xr = XR, i = 0, XM = (xl + xr) / 2;
     const steps: any[] = [];
 
-    while (iter < maxIter) {
-      XM = (XL + XR) / 2;
-
-      steps.push({ iter, XL, XR, XM, fXM: f(XM) });
-
-      if (Math.abs(f(XM)) < Error) break;
-
-      if (f(XL) * f(XM) < 0) XR = XM;
-      else XL = XM;
-
-      iter++;
+    while (Math.abs(xr - xl) >= error) {
+      XM = (xl + xr) / 2;
+      steps.push({ Iter: i, XL: xl, XR: xr, XM: XM, fXM: f(XM) });
+      if (f(xl) * f(XM) < 0) xr = XM;
+      else xl = XM;
+      i++;
     }
 
     setXM(XM);
     setResult(steps);
-    return XM;
-  }
-  function generateGraphData(equation: string, min = -10, max = 10, step = 0.1) {
-  const f = new Function("x", "return " + equation + ";");
-  const xValues = [];
-  const yValues = [];
-  for (let x = min; x <= max; x += step) {
-    xValues.push(x);
-    yValues.push(f(x));
-  }
-  return { xValues, yValues };
-}
+  };
 
   return (
     <div className="container">
-      <section className="center-heading">
-        <h2>Thanadate Sahayunyung 6704062612103</h2>
-      </section>
       <section className="center">
-        <h1>Bisection</h1>
+        <h1>Bisection Method</h1>
+        <InputEquation equation={equation} onChange={setEquation} />
+
         <div>
-          <h3>โจทย์</h3>
+          <h4>XL</h4>
+          <input
+            type="number"
+            value={XL}
+            onChange={(e) => setXL(parseFloat(e.target.value))}
+          />
+          <h4>XR</h4>
+          <input
+            type="number"
+            value={XR}
+            onChange={(e) => setXR(parseFloat(e.target.value))}
+          />
+          <h4>Error</h4>
+          <input
+            type="number"
+            value={error}
+            onChange={(e) => setError(parseFloat(e.target.value))}
+          />
         </div>
-        <input
-          type="text"
-          value={equation}
-          onChange={(e) => setEquation(e.target.value)}
+
+        <SolveButton onClick={Bisection} />
+
+        <h3>ผลลัพธ์ XM : {isFinite(XM) ? XM.toFixed(6) : "—"}</h3>
+
+        <ResultTable
+          columns={["Iter", "XL", "XR", "XM", "fXM"]}
+          data={Result}
         />
-        <div className="flex-container">
-          
-          <div>
-            <h4>XL</h4>
-            <input
-              type="number"
-              value={XL}
-              onChange={(e) => setXL(parseFloat(e.target.value))}
-            />
-          </div>
-          <div>
-            <h4>XR</h4>
-            <input
-              type="number"
-              value={XR}
-              onChange={(e) => setXR(parseFloat(e.target.value))}
-            />
-          </div>
-          
-        </div>
-        <button onClick={() => Bisection(equation, XL, XR)}>คำนวณราก</button>
 
-        <h2>ผลลัพธ์ XM: {XM} </h2>
-
-        <div>
-          <table className="center-table">
-            <thead>
-              <tr>
-                <th>Iteration</th>
-                <th>XL</th>
-                <th>XR</th>
-                <th>XM</th>
-                <th>f(XM)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Result.map((res, index) => (
-                <tr key={index}>
-                  <td>{res.iter}</td>
-                  <td>{res.XL.toFixed(6)}</td>
-                  <td>{res.XR.toFixed(6)}</td>
-                  <td>{res.XM.toFixed(6)}</td>
-                  <td>{res.fXM.toExponential(6)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-  <Plot
-  data={[
-    {
-      x: generateGraphData(equation).xValues,
-      y: generateGraphData(equation).yValues,
-      type: "scatter",
-      mode: "lines",
-      marker: { color: "blue" },
-      name: "f(x)",
-    },
-    {
-      x: [XL, XR, XM],
-      y: [
-        new Function("x", "return " + equation + ";")(XL),
-        new Function("x", "return " + equation + ";")(XR),
-        new Function("x", "return " + equation + ";")(XM),
-      ],
-      mode: "markers+text",
-      marker: { color: ["red", "green", "orange"], size: 10 },
-      text: ["XL", "XR", "XM"],
-      textposition: "top center",
-      name: "Points",
-    },
-  ]}
-  layout={{
-    width: 700,
-    height: 400,
-    title: { text: "Graph of f(x)" }, 
-    xaxis: { title: { text: "x" } }, 
-    yaxis: { title: { text: "f(x)" } }, 
-  }}
-/>
+        <GraphPlot
+          data={[
+            {
+              x: Array.from({ length: 200 }, (_, i) => i / 10 - 10),
+              y: Array.from({ length: 200 }, (_, i) => {
+                const safeEq = equation
+                  .replaceAll("^", "**")
+                  .replaceAll(";", "")
+                  .trim();
+                try {
+                  return new Function(
+                    "x",
+                    "with(Math) { return " + safeEq + "; }"
+                  )(i / 10 - 10);
+                } catch {
+                  return NaN;
+                }
+              }),
+              type: "scatter",
+              mode: "lines",
+              name: "f(x)",
+            },
+          ]}
+          title="Graph of f(x)"
+        />
       </section>
     </div>
   );
-}
+};
 
-export default App;
+export default BisectionPage;

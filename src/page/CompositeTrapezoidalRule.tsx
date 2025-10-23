@@ -2,7 +2,7 @@ import { useState } from "react";
 import Plot from "react-plotly.js";
 
 const CompositeTrapezoidal: React.FC = () => {
-  const [funcStr, setFuncStr] = useState("x**2"); // ตัวอย่าง f(x)=x^2
+  const [funcStr, setFuncStr] = useState("x**2"); 
   const [a, setA] = useState(0);
   const [b, setB] = useState(2);
   const [n, setN] = useState(4); // จำนวนช่วงย่อย
@@ -10,7 +10,6 @@ const CompositeTrapezoidal: React.FC = () => {
 
   const f = (x: number) => {
     try {
-      // eslint-disable-next-line no-new-func
       return new Function("x", `return ${funcStr}`)(x);
     } catch (e) {
       return NaN;
@@ -30,7 +29,6 @@ const CompositeTrapezoidal: React.FC = () => {
     const xs = Array.from({ length: 101 }, (_, i) => a + i * step);
     const ys = xs.map(f);
 
-    // พื้นที่ trapezoid หลายช่วง
     const trapezoids: any[] = [];
     const h = (b - a) / n;
     for (let i = 0; i < n; i++) {
@@ -62,7 +60,7 @@ const CompositeTrapezoidal: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div className="container">
       <h1>Composite Trapezoidal Rule</h1>
 
       <div>

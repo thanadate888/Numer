@@ -48,7 +48,7 @@ const TrapezoidalSingle: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div className="container">
       <h1>Single Trapezoidal Rule</h1>
 
       <div>
@@ -77,9 +77,9 @@ const TrapezoidalSingle: React.FC = () => {
         />
       </div>
 
-      <button
+      <button className="button"
         onClick={calculateTrapezoid}
-        style={{ marginTop: "10px", padding: "5px 15px", borderRadius: "8px" }}
+       
       >
         คำนวณ Integral
       </button>

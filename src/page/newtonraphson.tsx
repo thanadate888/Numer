@@ -1,38 +1,28 @@
 import { useState } from "react";
-import Plot from "react-plotly.js";
+import InputEquation from "../component/InputEquation";
+import GraphPlot from "../component/GraphPlot";
+import ResultTable from "../component/ResultTable";
+import SolveButton from "../component/SolveButton";
 
 const NewtonRaphson: React.FC = () => {
   const [x0, setX0] = useState(0);
   const [equation, setEquation] = useState("x**3 + 4*x**2 - 10"); // f(x)
   const [derivative, setDerivative] = useState("3*x**2 + 8*x");   // f'(x)
   const [XM, setXM] = useState(0);
+  const [error, setError] = useState(1e-6);
   const [Result, setResult] = useState<any[]>([]);
 
-  // สร้างข้อมูลกราฟ
-  const generateGraphData = (equation: string, start: number, end: number, steps = 100) => {
-    const f = new Function("x", "return " + equation + ";");
-    const xValues: number[] = [];
-    const yValues: number[] = [];
-    const step = (end - start) / steps;
-
-    for (let i = 0; i <= steps; i++) {
-      const x = start + i * step;
-      xValues.push(x);
-      yValues.push(f(x));
-    }
-
-    return { xValues, yValues };
-  };
-
-  // ฟังก์ชันหลัก Newton-Raphson
   const NewtonRaphsonMethod = (
     equation: string,
     derivative: string,
     x0: number,
-    Error = 1e-6,
     maxIter = 100
   ) => {
-    const f = new Function("x", "return " + equation + ";");
+    const safeEq = equation
+      .replaceAll("^", "**")
+      .replaceAll(";", "")
+      .trim();
+    const f = new Function("x", "with(Math) { return " + safeEq + " }");
     const fPrime = new Function("x", "return " + derivative + ";");
 
     let XM = x0;
@@ -52,7 +42,7 @@ const NewtonRaphson: React.FC = () => {
 
       steps.push({ iter, XM, fXM, fPrimeXM, xNext });
 
-      if (Math.abs(xNext - XM) < Error) break;
+      if (Math.abs(xNext - XM) < error) break;
 
       XM = xNext;
       iter++;
@@ -63,7 +53,7 @@ const NewtonRaphson: React.FC = () => {
     return XM;
   };
 
-  const graphData = generateGraphData(equation, x0 - 5, x0 + 5);
+
 
   return (
     <div className="container">
@@ -72,11 +62,7 @@ const NewtonRaphson: React.FC = () => {
 
         <div>
           <h4>โจทย์ f(x)</h4>
-          <input
-            type="text"
-            value={equation}
-            onChange={(e) => setEquation(e.target.value)}
-          />
+          <InputEquation equation={equation} onChange={setEquation} />
         </div>
 
         <div>
@@ -95,68 +81,34 @@ const NewtonRaphson: React.FC = () => {
             value={x0}
             onChange={(e) => setX0(parseFloat(e.target.value))}
           />
+          <h4>Error</h4>
+        <input type="number" value={error} onChange={(e) => setError(parseFloat(e.target.value))} />
         </div>
 
-        <button onClick={() => NewtonRaphsonMethod(equation, derivative, x0)}>
-          คำนวณราก
-        </button>
+        <SolveButton
+          onClick={() => NewtonRaphsonMethod(equation, derivative, x0)}
+        />
 
         <h2>ผลลัพธ์ XM: {XM.toFixed(6)}</h2>
 
-        {/* ตารางแสดงแต่ละรอบ */}
-        <table className="center-table">
-          <thead>
-            <tr>
-              <th>Iteration</th>
-              <th>XM</th>
-              <th>f(XM)</th>
-              <th>f'(XM)</th>
-              <th>X Next</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Result.map((res: any, index: number) => (
-              <tr key={index}>
-                <td>{res.iter}</td>
-                <td>{res.XM.toFixed(6)}</td>
-                <td>{res.fXM.toExponential(6)}</td>
-                <td>{res.fPrimeXM.toExponential(6)}</td>
-                <td>{res.xNext.toFixed(6)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* กราฟ f(x) และจุด XM */}
-        <Plot
-          data={[
-            {
-              x: graphData.xValues,
-              y: graphData.yValues,
-              type: "scatter",
-              mode: "lines",
-              marker: { color: "blue" },
-              name: "f(x)",
-            },
-            {
-              x: Result.map((res: any) => res.XM),
-              y: Result.map((res: any) => res.fXM),
-              type: "scatter",
-              mode: "markers+text",
-              marker: { color: "red", size: 10 },
-              text: Result.map((_, i) => `XM${i}`),
-              textposition: "top center",
-              name: "XM Points",
-            },
-          ]}
-          layout={{
-            width: 700,
-            height: 400,
-            title: { text: "Graph of f(x) with XM" },
-            xaxis: { title: { text: "x" } },
-            yaxis: { title: { text: "f(x)" } },
-          }}
+        <ResultTable
+          columns={["iter", "XM", "fXM", "fPrimeXM", "xNext"]}
+          data={Result}
         />
+        <GraphPlot
+        data={[
+          {
+            x: Array.from({ length: 200 }, (_, i) => i / 10 - 10),
+            y: Array.from({ length: 200 }, (_, i) =>
+              new Function("x", "with(Math){ return " + " }")(i / 10 - 10)
+            ),
+            type: "scatter",
+            mode: "lines",
+            name: "f(x)",
+          },
+        ]}
+        title="Graph of f(x)"
+      />
       </section>
     </div>
   );

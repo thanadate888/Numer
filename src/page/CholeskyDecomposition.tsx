@@ -78,7 +78,7 @@ const CholeskyDecomposition: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div className="container">
       <h1>Cholesky Decomposition Solver</h1>
 
       <h3>กรอกค่า Matrix A และ B (Symmetric Positive Definite)</h3>

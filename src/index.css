@@ -74,9 +74,12 @@ button:focus-visible {
 .container {
   display: block;
   justify-content: center; /* จัดตรงกลางแนวนอน */
+  text-align: center;
+  align-items: center;
+  padding: 20px;
   padding-top: 40px;       /* ระยะห่างด้านบน */
   min-height: 100vh;
-  background: linear-gradient(200deg, #ffbde6,  #fbf7b9);
+  background: linear-gradient(200deg, #ffbdd4,  #fbf7b9);
 }
 section {
   display: block;

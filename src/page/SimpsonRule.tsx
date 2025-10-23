@@ -2,7 +2,7 @@ import { useState } from "react";
 import Plot from "react-plotly.js";
 
 const SimpsonRule: React.FC = () => {
-  const [funcStr, setFuncStr] = useState("x**2"); // ตัวอย่าง f(x)=x^2
+  const [funcStr, setFuncStr] = useState("x**2"); 
   const [a, setA] = useState(0);
   const [b, setB] = useState(2);
   const [n, setN] = useState(4); // ต้องเป็นคู่
@@ -10,7 +10,6 @@ const SimpsonRule: React.FC = () => {
 
   const f = (x: number) => {
     try {
-      // eslint-disable-next-line no-new-func
       return new Function("x", `return ${funcStr}`)(x);
     } catch {
       return NaN;

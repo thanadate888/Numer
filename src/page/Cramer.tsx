@@ -65,10 +65,11 @@ const CramersRule: React.FC = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
+    <div className="container">
+      <section className="center">
       <h1>Cramer’s Rule Solver</h1>
 
-      <div style={{ marginBottom: "10px" }}>
+      <div>
         <label>ขนาดเมทริกซ์: </label>
         <select
           value={size}
@@ -166,14 +167,16 @@ const CramersRule: React.FC = () => {
           layout={{
             width: 700,
             height: 400,
-            title: { text: "กราฟสมการ 2 เส้น (Cramer’s Rule)" },
+            title: { text: "กราฟสมการ 2 เส้น (Cramer’s Rule)" }, 
             xaxis: { title: { text: "x₁" } },
             yaxis: { title: { text: "x₂" } },
           }}
         />
       )}
+      </section>
     </div>
   );
 };
 
 export default CramersRule;
+
