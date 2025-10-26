@@ -25,7 +25,7 @@ import Ordinarydifferentialequations from "./page/OrdinaryDifferentialEquations"
 import SecondDerivative from "./page/SecondDerivative";
 function App() {
   return (
-    <BrowserRouter basename="/Numer">
+    <BrowserRouter >
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/bisection" element={<Bisection />} />
