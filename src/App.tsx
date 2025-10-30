@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import Main from "./Mainmemu";
 import Bisection from "./page/Bisection";
 import FalsePosition from "./page/FalsePosition";
@@ -25,7 +25,7 @@ import Ordinarydifferentialequations from "./page/OrdinaryDifferentialEquations"
 import SecondDerivative from "./page/SecondDerivative";
 function App() {
   return (
-    <BrowserRouter >
+    
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/bisection" element={<Bisection />} />
@@ -52,7 +52,7 @@ function App() {
         <Route path="/Ordinarydifferentialequations" element={<Ordinarydifferentialequations />} />
         <Route path="/SecondDerivative" element={<SecondDerivative />} />
       </Routes>
-    </BrowserRouter>
+    
   );
 }
 
